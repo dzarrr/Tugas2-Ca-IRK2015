@@ -12,6 +12,8 @@ public:
 	int bigNumberIndex(int index); //Untuk mendapatkan digit ke-index dari suatu bigNumber
 	addbigNum(bigNumber n2);
 	subtractbigNum(bigNumber n2);
+	dividebigNum(bigNumber n2);
+	multiplybigNum(bigNumber n2);
 	bool isGreaterThan(bigNumber n2);
 	bool isSmallerThan(bigNumber n2);
 

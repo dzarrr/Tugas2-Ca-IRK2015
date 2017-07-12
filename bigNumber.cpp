@@ -1,11 +1,11 @@
 #include "bigNumber.h"
-
+#define size 50
 using namespace std;
 
 bigNumber::bigNumber(char* number){
 	int i=0;
-	data = new int [25];
-	int temp[25];
+	data = new int [size];
+	int temp[size];
 	while (number[i]!='\0'){
 		temp[i] = number[i] - 48;
 		i++;
@@ -21,7 +21,7 @@ bigNumber::bigNumber(char* number){
 }
 
 bigNumber::bigNumber(const bigNumber& n1){
-	data = new int[25];
+	data = new int[size];
 	digit = n1.digit;
 	for (int i = 0; i < digit; i++){
 		data[i] = n1.data[i];
@@ -41,7 +41,7 @@ int bigNumber::bigNumberIndex(int index){
 }
 
 bigNumber::addbigNum(bigNumber n2){
-	char temp[25];
+	char temp[size];
 	int length = 0;
 	int i = 0;
 	int result = 0;
@@ -67,7 +67,7 @@ bigNumber::addbigNum(bigNumber n2){
 		  i++;
 		  length++;
 	}
-	char reversed[25];
+	char reversed[size];
 	int indeks = 0;
 	for (int i = length-1; i >= 0; i--){
 		reversed[indeks] = temp[i];
@@ -76,10 +76,10 @@ bigNumber::addbigNum(bigNumber n2){
 	reversed[indeks] = '\0';
 
 	delete [] data;
-	data = new int [25];
+	data = new int [size];
 
 	i = 0;
-	int tempint[25];
+	int tempint[size];
 	while (reversed[i]!='\0'){
 		tempint[i] = reversed[i] - '0';
 		i++;
@@ -93,12 +93,11 @@ bigNumber::addbigNum(bigNumber n2){
 		indeks++;
 	}
 	digit = tempdigit;
-	cout << digit << endl;
 }
 
 
 bigNumber::subtractbigNum(bigNumber n2){
-	char temp[25];
+	char temp[size];
 	int length = 0;
 	int i = 0;
 	int result = 0;
@@ -124,7 +123,7 @@ bigNumber::subtractbigNum(bigNumber n2){
 		  i++;	
 		  length++;
 	}
-	char reversed[25];
+	char reversed[size];
 	int indeks = 0;
 	for (int i = length-1; i >= 0; i--){
 		reversed[indeks] = temp[i];
@@ -133,10 +132,67 @@ bigNumber::subtractbigNum(bigNumber n2){
 	reversed[indeks] = '\0';
 	
 	delete [] data;
-	data = new int [25];
+	data = new int [size];
 
 	i = 0;
-	int tempint[25];
+	int tempint[size];
+	while (reversed[i]!='\0'){
+		tempint[i] = reversed[i] - '0';
+		i++;
+	}
+	int tempdigit = i;
+
+	indeks = 0;
+
+	for (int i = tempdigit-1; i >= 0; i--){
+		data[indeks] = tempint[i] ;
+		indeks++;
+	}
+	digit = tempdigit;
+}
+
+bigNumber::multiplybigNum(bigNumber n2){
+	int temp[size*2];
+	char tempstring[size*2];
+	int templength = digit + n2.digit - 1;
+	int carry = 0;
+	for (int i = 0; i < size*2; i++) temp[i] = 0;
+	int plus = 0;
+
+	for (int i = 0; i < n2.digit; i++){
+		for (int j = 0; j < digit; j++){
+			temp[plus+j] += bigNumberIndex(j) * n2.bigNumberIndex(i);
+		}
+		plus++;
+	}
+
+	for (int i = 0; i < templength; i++){
+		temp[i] += carry;
+		tempstring[i] = (temp[i]%10) + '0';
+		carry = temp[i] / 10;
+	}
+	int i = 0;
+	while (carry != 0){
+		tempstring[templength + i] = carry%10 +'0';
+		carry /= 10;
+		i++;
+	}
+	templength = templength + i ;
+
+
+	char reversed[size];
+	int indeks = 0;
+	for (int i = templength-1; i >= 0; i--){
+		reversed[indeks] = tempstring[i];
+		indeks++;
+	}
+	reversed[indeks] = '\0';
+	
+	delete [] data;
+	data = new int [size];
+
+	i = 0;
+	int tempint[size];
 	while (reversed[i]!='\0'){
 		tempint[i] = reversed[i] - '0';
 		i++;

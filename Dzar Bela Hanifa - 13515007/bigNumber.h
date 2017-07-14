@@ -2,6 +2,7 @@
 #define BIGNUMBER_H
 
 #include <iostream>
+#include <vector>
 using namespace std;
 
 class bigNumber{
@@ -18,8 +19,9 @@ public:
 	bool isSmallerThan(bigNumber n2);
 
 private:
-	int* data;
+	vector<long long int> data;
 	int digit;
+	bool positif;
 };
 
 #endif

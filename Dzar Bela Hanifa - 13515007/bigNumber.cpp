@@ -4,28 +4,29 @@ using namespace std;
 
 bigNumber::bigNumber(char* number){
 	int i=0;
-	data = new int [size];
+	data.clear();
 	int temp[size];
 	while (number[i]!='\0'){
-		temp[i] = number[i] - 48;
+		if (i == 0){
+			if (number[i] == '-') positif = false;
+			else temp[i] = number[i] - '0';
+		} else temp[i] = number[i] - '0';
 		i++;
 	}
 	digit = i;
 
-	int indeks = 0;
-
 	for (int i = digit-1; i >= 0; i--){
-		data[indeks] = temp[i];
-		indeks++;
+		data.push_back(temp[i]);
 	}
 }
 
 bigNumber::bigNumber(const bigNumber& n1){
-	data = new int[size];
+	data.clear();
 	digit = n1.digit;
 	for (int i = 0; i < digit; i++){
-		data[i] = n1.data[i];
+		data.push_back(n1.data[i]);
 	}
+	positif = n1.positif;
 }
 
 bigNumber::printbigNum(){
@@ -49,7 +50,7 @@ bigNumber::addbigNum(bigNumber n2){
 
 	while ((i < digit) || (i < n2.digit)){
 		if ((i < digit) && (i < n2.digit)){
-			result = bigNumberIndex(i) + n2.bigNumberIndex(i);
+			result = this->data[i] + n2.data[i];
 			if (carry){
 				result++;
 			}
@@ -60,13 +61,18 @@ bigNumber::addbigNum(bigNumber n2){
 				carry = false;
 			}
 		} else if ((i < digit) && (i >= n2.digit)){
-			result = bigNumberIndex(i);
+			result = data[i];
 		} else if ((i >= digit) && ( i < n2.digit)){
-			result = n2.bigNumberIndex(i);
+			result = n2.data[i];
 		} temp[i] = result + '0';
 		  i++;
 		  length++;
 	}
+	if (carry) {
+		temp[length] = '1';
+		length++;
+	}
+
 	char reversed[size];
 	int indeks = 0;
 	for (int i = length-1; i >= 0; i--){
@@ -75,8 +81,7 @@ bigNumber::addbigNum(bigNumber n2){
 	}
 	reversed[indeks] = '\0';
 
-	delete [] data;
-	data = new int [size];
+	data.clear();
 
 	i = 0;
 	int tempint[size];
@@ -86,11 +91,8 @@ bigNumber::addbigNum(bigNumber n2){
 	}
 	int tempdigit = i;
 
-	indeks = 0;
-
 	for (int i = tempdigit-1; i >= 0; i--){
-		data[indeks] = tempint[i] ;
-		indeks++;
+		data.push_back(tempint[i]);
 	}
 	digit = tempdigit;
 }
@@ -123,6 +125,9 @@ bigNumber::subtractbigNum(bigNumber n2){
 		  i++;	
 		  length++;
 	}
+	while(temp[length-1] == '0'){
+		length--;
+	}
 	char reversed[size];
 	int indeks = 0;
 	for (int i = length-1; i >= 0; i--){
@@ -131,8 +136,7 @@ bigNumber::subtractbigNum(bigNumber n2){
 	}
 	reversed[indeks] = '\0';
 	
-	delete [] data;
-	data = new int [size];
+	data.clear();
 
 	i = 0;
 	int tempint[size];
@@ -142,11 +146,8 @@ bigNumber::subtractbigNum(bigNumber n2){
 	}
 	int tempdigit = i;
 
-	indeks = 0;
-
 	for (int i = tempdigit-1; i >= 0; i--){
-		data[indeks] = tempint[i] ;
-		indeks++;
+		data.push_back(tempint[i]);
 	}
 	digit = tempdigit;
 }
@@ -188,8 +189,7 @@ bigNumber::multiplybigNum(bigNumber n2){
 	}
 	reversed[indeks] = '\0';
 	
-	delete [] data;
-	data = new int [size];
+	data.clear();
 
 	i = 0;
 	int tempint[size];
@@ -202,10 +202,14 @@ bigNumber::multiplybigNum(bigNumber n2){
 	indeks = 0;
 
 	for (int i = tempdigit-1; i >= 0; i--){
-		data[indeks] = tempint[i] ;
+		data.push_back(tempint[i]) ;
 		indeks++;
 	}
 	digit = tempdigit;
+}
+
+bigNumber::dividebigNum (bigNumber n2){
+
 }
 
 bool bigNumber :: isGreaterThan (bigNumber n2){
@@ -255,3 +259,4 @@ bool bigNumber::isSmallerThan (bigNumber n2){
 		return (cek);
 	}
 }
+
